@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<link rel="stylesheet" href="/stylesheets/style.css" />
+		<style>
+			a {
+				color: black;
+				text-decoration: none;
+			}
+		</style>
+	</head>
+	<body>
+		<h1><%= title %></h1>
+		<h2>表單練習</h2>
+		<form>
+			<label for="name">姓名:</label>
+			<input type="text" id="name" name="name" placeholder="王曉明" />
+			<br />
+			<br />
+			<label for="age">年齡:</label>
+			<select name="age" id="age">
+				<%for(let i=1;i<=110;i++){ %>
+				<option value="<%=i%>"><%=i%></option>
+				<% } %>
+			</select>
+			<br />
+			<br />
+			<label for="address">地址:</label>
+			<input
+				type="text"
+				name="address"
+				id="address"
+				placeholder="台中市xxx區" />
+			<br />
+			<br />
+
+			<button class="dataSumbit">送出</button>
+		</form>
+		<h2>資料呈現</h2>
+
+		<% dataArray.forEach((v,i)=>{ %>
+
+		<span>id:<%=v.id%></span>
+		<br />
+		<span>姓名:<span class="nameData"><%=v.name%></span></span>
+		<br />
+		<span>年齡:<span class="ageData"><%=v.age%></span></span>
+		<br />
+		<span>地址:<span class="addressData"><%=v.address%></span></span>
+		<br />
+		<a href="/getData/detail/<%=v.id%>"><button>修改</button></a>
+		<button class="deletButton" onclick="deleted(<%=v.id%>)">刪除</button>
+		<br />
+		<br />
+
+		<% }) %>
+		<script>
+			const dataSumbitEl = document.querySelector(".dataSumbit");
+			dataSumbitEl.addEventListener("click", async (e) => {
+				e.preventDefault();
+				const formEl = document.querySelector("form");
+				const formData = new FormData(formEl);
+
+				const response = await fetch("/getData/getform", {
+					method: "POST",
+					body: formData,
+				});
+				const data = await response.json();
+				window.location.reload();
+			});
+
+			async function deleted(id) {
+				const response = await fetch(`/getData/deleted/${id}`, {
+					method: "DELETE",
+				});
+				const data = await response.json();
+				console.log(data);
+
+				if (data) {
+					window.location.reload();
+				}
+			}
+		</script>
+	</body>
+</html>

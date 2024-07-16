@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<link rel="stylesheet" href="/stylesheets/style.css" />
+		<style>
+			a {
+				color: black;
+				text-decoration: none;
+			}
+		</style>
+	</head>
+	<body>
+		<h1><%= title %></h1>
+		<h2>表單練習</h2>
+		<form>
+			<label for="name">姓名:</label>
+			<input
+				type="text"
+				id="name"
+				name="name"
+				placeholder="王曉明"
+				value="<%=name%>" />
+			<br />
+			<br />
+			<label for="age">年齡:</label>
+			<select name="age" id="age">
+				<%for(let i=1;i<=110;i++){ %>
+				<option value="<%=i%>" <%= (i == age) ? "selected" : "" %>>
+          <%=i%>
+        </option>
+				<% } %>
+			</select>
+			<br />
+			<br />
+			<label for="address">地址:</label>
+			<input
+				type="text"
+				name="address"
+				id="address"
+				placeholder="台中市xxx區"
+				value="<%=address%>" />
+			<br />
+			<br />
+
+			<button class="dataSumbit">送出</button>
+		</form>
+
+		<script>
+      const dataSumbitEl = document.querySelector(".dataSumbit");
+			dataSumbitEl.addEventListener("click", async (e) => {
+				e.preventDefault();
+				const formEl = document.querySelector("form");
+				const formData = new FormData(formEl);
+
+				const response = await fetch("/getData/changeDetail/<%=id%>", {
+					method: "PUT",
+					body: formData,
+				});
+				const data = await response.json();
+
+				window.location.href='/getData/'
+			});
+
+    </script>
+	</body>
+</html>
